@@ -1,0 +1,6 @@
+instagrapi
+colorama
+pyTelegramBotAPI
+Pillow
+anticaptchaofficial
+requests

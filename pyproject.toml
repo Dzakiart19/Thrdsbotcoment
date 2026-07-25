@@ -1,0 +1,13 @@
+[project]
+name = "repl-nix-workspace"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "anticaptchaofficial>=1.0.70",
+    "colorama>=0.4.6",
+    "instagrapi>=2.18.9",
+    "pillow>=12.3.0",
+    "pytelegrambotapi>=4.36.0",
+    "requests>=2.34.2",
+]

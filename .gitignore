@@ -1,0 +1,15 @@
+# Credentials & session — JANGAN pernah commit
+data/accounts.txt
+data/session_*.json
+data/settings.json
+
+# Runtime files
+data/logs.txt
+data/posts.db
+data/*.db
+data/history/
+__pycache__/
+*.pyc
+*.pyo
+.pythonlibs/
+test_login.py
