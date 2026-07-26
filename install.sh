@@ -15,8 +15,8 @@ CYAN='\033[0;36m'
 BOLD='\033[1m'
 NC='\033[0m'
 
-REPO_URL="https://github.com/olivesailorproduce/TikTok-Auto-Commenter-2026-Automated-Feed-Commenting-with-Proxy-Multi-Threading"
-INSTALL_DIR="$HOME/threads-bot"
+REPO_URL="https://github.com/Dzakiart19/Thrdsbotcoment"
+INSTALL_DIR="$HOME/Thrdsbotcoment"
 DATA_DIR="$INSTALL_DIR/data"
 
 echo ""
