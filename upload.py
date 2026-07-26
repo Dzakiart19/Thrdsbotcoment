@@ -801,32 +801,32 @@ def upload(username, password, email, email_password, proxy, thread_index: int, 
         os.makedirs(_history_dir)
     
     relogged = False
+
+    if len(threads.token) == 0:
+        return "empty_token", 0
+
+    # Onboarding — optional, skip gracefully on any error (429, JSON error, etc.)
     try:
-        if len(threads.token) == 0:
-            return "empty_token", 0
-        
-        Logger.Log(f"[thread#{thread_index}] Profile create status: " + threads.set_text_post_app_onboarding()["status"], Fore.GREEN)
-    except LogoutException as e:
-        last_exception = e
+        onboard_status = threads.set_text_post_app_onboarding().get("status", "skipped")
+        Logger.Log(f"[thread#{thread_index}] Profile create status: {onboard_status}", Fore.GREEN)
+    except LogoutException:
         with open(os.path.join(_history_dir, "failed.txt"), "a") as f:
-            f.write(f"{username}:{password}" + (f":{email}:{email_password}" if len(email) > 0 else "") + f" - 0" + (f" | {repr(last_exception)}" if last_exception is not None else "") + (f" | {threads.last_response.text}" if threads.last_response is not None else "") + "\n")
+            f.write(f"{username}:{password}" + (f":{email}:{email_password}" if len(email) > 0 else "") + " - 0 | LogoutException on onboard\n")
         Logger.Log(f"[thread#{thread_index}] Account logged out @{username}", Fore.RED)
-        Logger.Log(f"[thread#{thread_index}] Finished upload @{username}", Fore.GREEN)
         return "logged_out", 0
-    except AccountSuspendedException as e:
-        last_exception = e
+    except AccountSuspendedException:
         with open(os.path.join(_history_dir, "failed.txt"), "a") as f:
-            f.write(f"{username}:{password}" + (f":{email}:{email_password}" if len(email) > 0 else "") + f" - 0" + (f" | {repr(last_exception)}" if last_exception is not None else "") + (f" | {threads.last_response.text}" if threads.last_response is not None else "") + "\n")
+            f.write(f"{username}:{password}" + (f":{email}:{email_password}" if len(email) > 0 else "") + " - 0 | AccountSuspended on onboard\n")
         Logger.Log(f"[thread#{thread_index}] Account suspended @{username}", Fore.RED)
-        Logger.Log(f"[thread#{thread_index}] Finished upload @{username}", Fore.GREEN)
         return "account_suspended", 0
-    except SubmitPhoneException as e:
-        last_exception = e
+    except SubmitPhoneException:
         with open(os.path.join(_history_dir, "failed.txt"), "a") as f:
-            f.write(f"{username}:{password}" + (f":{email}:{email_password}" if len(email) > 0 else "") + f" - 0" + (f" | {repr(last_exception)}" if last_exception is not None else "") + (f" | {threads.last_response.text}" if threads.last_response is not None else "") + "\n")
+            f.write(f"{username}:{password}" + (f":{email}:{email_password}" if len(email) > 0 else "") + " - 0 | SubmitPhone on onboard\n")
         Logger.Log(f"[thread#{thread_index}] Submit phone @{username}", Fore.RED)
-        Logger.Log(f"[thread#{thread_index}] Finished upload @{username}", Fore.GREEN)
         return "submit_phone", 0
+    except Exception as e:
+        # 429 / JSONDecodeError / network hiccup — non-fatal, lanjut posting
+        Logger.Log(f"[thread#{thread_index}] Onboarding skipped ({repr(e)}), continuing…", Fore.YELLOW)
     
     if len(avatar_folder.strip()) != 0 and os.path.exists(avatar_folder) and not threads.is_avatar_set():
         avatar_folder_list = os.listdir(avatar_folder)
