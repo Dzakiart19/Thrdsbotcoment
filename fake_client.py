@@ -99,6 +99,10 @@ class FakeClient:
         if "bloks_versioning_id" in self._settings:
             self.bloks_versioning_id = self._settings["bloks_versioning_id"]
 
+    def login(self, username, password, email="", email_password="", relogin=False):
+        """SESSION_FILE accounts cannot relogin via username/password — return False."""
+        return False
+
     def get_settings(self) -> dict:
         """Return settings dict as expected by upload.py."""
         s = dict(self._settings)

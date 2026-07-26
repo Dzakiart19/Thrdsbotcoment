@@ -887,6 +887,10 @@ def upload(username, password, email, email_password, proxy, thread_index: int, 
                 Logger.Log(f"[thread#{thread_index}] Account logged out @{username}", Fore.RED)
                 return "logged_out", successful_posts
             else:
+                # SESSION_FILE accounts cannot relogin via username/password
+                if password == "SESSION_FILE":
+                    Logger.Log(f"[thread#{thread_index}] Session expired — cannot relogin @{username}", Fore.RED)
+                    return "logged_out", successful_posts
                 Logger.Log(f"[thread#{thread_index}] Trying relogin @{username}", Fore.YELLOW)
                 relogged = True
                 threads.login(username, password, email, email_password, True)
