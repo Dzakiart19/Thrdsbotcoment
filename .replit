@@ -30,6 +30,7 @@ args = "uv run python3 main.py"
 [deployment]
 deploymentTarget = "autoscale"
 run = ["uv", "run", "python3", "main.py"]
+build = ["uv", "sync"]
 
 [[ports]]
 localPort = 5000
