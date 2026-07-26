@@ -1,0 +1,18 @@
+# Raw cookies dari HTTP request capture (www.threads.com)
+# Digunakan sebagai referensi untuk login WEB_SESSION
+
+ig_did=C68D6EDB-1178-481A-A662-59D844DB8177
+dpr=2.0375001430511475
+mid=amMkeAABAAEuYMSZRvPe1pi9_MVb
+ps_l=1
+ps_n=1
+ds_user_id=40126635242
+csrftoken=D7G8jqNeyVN9LWlANykVfwsCWgCEnlQZ
+sessionid=40126635242%3ADPa9IQ0a6yA1HC%3A28%3AAYiPq7K2ZlJVd4RGypmVlOASi0PwbgyrUpd0JLpisw
+rur="CCO\05440126635242\0541816566270:01ff304fca83e5bef5745c89402baa2ab5392fd9335f81557615f34b81ed06b6e746d8fa"
+
+# Headers lain yang relevan:
+# x-ig-app-id: 1412234116260832
+# x-csrftoken: D7G8jqNeyVN9LWlANykVfwsCWgCEnlQZ
+# user-agent: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36
+# referer: https://www.threads.com/@shadowheist08/post/DDRHPxSB1sJ
