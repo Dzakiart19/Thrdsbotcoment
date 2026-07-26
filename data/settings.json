@@ -1,7 +1,7 @@
 {
   "telegram_token": "",
   "telegram_chat_id": "",
-  "cirlce_upload": false,
+  "cirlce_upload": true,
   "set_image_on_rec": false,
   "set_image_on_warm": false,
   "max_time_seconds": 86400,
@@ -20,7 +20,7 @@
   "account_format": 0,
   "images": [],
   "threads": 1,
-  "comments": 20,
+  "comments": 999999,
   "captcha_key": "",
   "asocks_key": "",
   "unique_photo": 0,
