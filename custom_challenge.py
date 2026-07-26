@@ -1,10 +1,9 @@
 """
-Custom challenge handler wrapping instagrapi's ChallengeResolveMixin.
-ChallengeChoice enum is defined here because instagrapi doesn't expose it publicly.
+Challenge handler — uses fake_client stubs (no instagrapi needed).
 """
 
 from enum import Enum
-from instagrapi.mixins.challenge import ChallengeResolveMixin
+from fake_client import ChallengeResolveMixin
 
 
 class ChallengeChoice(Enum):

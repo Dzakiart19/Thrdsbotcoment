@@ -1,6 +1,4 @@
-from instagrapi import Client
-from instagrapi.exceptions import ChallengeRequired, ChallengeUnknownStep
-from instagrapi.utils import json_value
+from fake_client import FakeClient as Client, ChallengeRequired, ChallengeUnknownStep, json_value
 import random, requests, string, time, json, urllib, urllib.parse, uuid, mimetypes, os, datetime, sqlite3, multiprocessing, custom_challenge, traceback
 
 # Cross-platform data directory (works on Linux/Replit and Windows)
@@ -8,8 +6,14 @@ _DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 from settings import Settings
 from colorama import Fore
 import telebot
-from PIL import Image
-from anticaptchaofficial.recaptchav2proxyless import recaptchaV2Proxyless
+try:
+    from PIL import Image
+except ImportError:
+    Image = None
+try:
+    from anticaptchaofficial.recaptchav2proxyless import recaptchaV2Proxyless
+except ImportError:
+    recaptchaV2Proxyless = None
 from mobiles import DEVICES
 from requests.structures import CaseInsensitiveDict
 
