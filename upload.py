@@ -668,6 +668,8 @@ class Threads():
 def can_repost(id, max):
     conn = sqlite3.connect(os.path.join(_DATA_DIR, "posts.db"), check_same_thread=False)
     cursor = conn.cursor()
+    cursor.execute("CREATE TABLE IF NOT EXISTS posts (id TEXT PRIMARY KEY, repost_count INTEGER DEFAULT 0)")
+    conn.commit()
     cursor.execute("SELECT repost_count FROM posts WHERE id = ?", (id,))
     result = cursor.fetchone()
     
@@ -861,19 +863,26 @@ def upload(username, password, email, email_password, proxy, thread_index: int, 
             
             time.sleep(random.uniform(1, 3))
             
-            if len(res.get("feed_items", [])) == 0 and len(res.get("threads", [])) == 0:
+            # search API returns "search_threads"; timeline returns "feed_items" / "threads"
+            feed_items   = res.get("feed_items", [])
+            thread_items = res.get("threads", res.get("search_threads", []))
+
+            if len(feed_items) == 0 and len(thread_items) == 0:
                 max_id = None
                 rank_token = None
                 page_token = None
                 empty_pages = 200
                 continue
 
-            Logger.Log(f"[thread#{thread_index}] Received {len(res.get('feed_items', [])) + len(res.get('threads', []))} posts", Fore.GREEN)
+            Logger.Log(f"[thread#{thread_index}] Received {len(feed_items) + len(thread_items)} posts", Fore.GREEN)
             
-            for feed in res.get("feed_items", []) + res.get("threads", []):
+            for feed in feed_items + thread_items:
                 try:
                     if "text_post_app_thread" in feed:
                         post = feed["text_post_app_thread"]["thread_items"][0]["post"]
+                    elif "thread" in feed and "thread_items" in feed["thread"]:
+                        # search_threads format: {"thread": {"thread_items": [...]}}
+                        post = feed["thread"]["thread_items"][0]["post"]
                     elif "thread_items" in feed:
                         post = feed["thread_items"][0]["post"]
                     else:
