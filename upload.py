@@ -189,7 +189,7 @@ class Threads():
         # token = base64( {"ds_user_id":"...","sessionid":"...","should_use_header_over_cookies":true} )
         token_payload = json.dumps({
             "ds_user_id": ds_user_id,
-            "sessionid": sessionid,
+            "sessionid": urllib.parse.unquote(sessionid),
             "should_use_header_over_cookies": True,
         }, separators=(",", ":"))
         self.token = _b64.b64encode(token_payload.encode()).decode().rstrip("=")
