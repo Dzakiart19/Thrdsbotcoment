@@ -1,4 +1,5 @@
-instagrapi
+pydantic<2
+instagrapi<2
 colorama
 pyTelegramBotAPI
 Pillow

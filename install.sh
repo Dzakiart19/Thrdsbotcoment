@@ -44,9 +44,11 @@ fi
 
 # ── 4. Install Python packages ───────────────────────────
 echo -e "${YELLOW}[4/6] Menginstall Python packages...${NC}"
-pip install -q --upgrade pip
+# Catatan: JANGAN upgrade pip di Termux (dilarang)
+# Pin pydantic<2 agar tidak perlu compile Rust (pydantic-core)
 pip install -q \
-    instagrapi \
+    "pydantic<2" \
+    "instagrapi<2" \
     colorama \
     pyTelegramBotAPI \
     Pillow \
