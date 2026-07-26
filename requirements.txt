@@ -1,4 +1,0 @@
-colorama
-pyTelegramBotAPI
-anticaptchaofficial
-requests
