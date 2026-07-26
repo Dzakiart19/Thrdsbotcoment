@@ -219,11 +219,14 @@ class Threads():
             Logger.LogFile(f"[thread#{self.thread_index}] POST {url}" + (f"?{urllib.parse.urlencode(params)}" if params is not None else ""))
             Logger.LogFile(f"[thread#{self.thread_index}] Headers={headers}")
             Logger.LogFile(f"[thread#{self.thread_index}] Body={body}")
+        r = None
         for i in range(5):
             try:
                 r = self.auth_session.post(url, params=params, headers=headers, data=body)
                 break
             except Exception: pass
+        if r is None:
+            raise Exception(f"All 5 POST attempts failed for {url}")
         self.last_response = r
         if "rupload_igphoto" not in url:
             Logger.LogFile(f"[thread#{self.thread_index}] Response={r.text}")
@@ -283,11 +286,14 @@ class Threads():
         Logger.LogFile("=============================================================")
         Logger.LogFile(f"[thread#{self.thread_index}] GET {url}" + (f"?{urllib.parse.urlencode(params)}" if params is not None else ""))
         Logger.LogFile(f"[thread#{self.thread_index}] Headers={headers}")
+        r = None
         for i in range(5):
             try:
                 r = self.auth_session.get(url, params=params, headers=headers)
                 break
             except Exception: pass
+        if r is None:
+            raise Exception(f"All 5 GET attempts failed for {url}")
         self.last_response = r
         Logger.LogFile(f"[thread#{self.thread_index}] Response={r.text}")
         
@@ -448,8 +454,10 @@ class Threads():
 
     def _upload_image(self, path: str, is_avatar: bool = False):
         if self.unique_settings.unique_photo == 0 and not is_avatar:
-            dist_path = path.replace(".", f"{''.join(random.choices(string.ascii_letters, k=8))}.")
-            # TODO: Unique
+            ext = os.path.splitext(path)[1]
+            dist_path = os.path.join(os.path.dirname(path), ''.join(random.choices(string.ascii_letters, k=8)) + ext)
+            import shutil
+            shutil.copy2(path, dist_path)
             path = dist_path
         
         random_number = random.randint(1000000000, 9999999999)
@@ -938,15 +946,15 @@ def upload_manager(serialized_settings: str, thread_index):
     
     accounts = open(settings.accounts_file, "r", encoding="utf-8").readlines()
     
-    proxies = open(settings.proxies_file, "r", encoding="utf-8").readlines()
+    proxies = open(settings.proxies_file, "r", encoding="utf-8").readlines() if settings.proxies_file and os.path.exists(settings.proxies_file) else []
     texts = open(settings.text_file, "r", encoding="utf-8").readlines()
     images = settings.images
 
     post_files = []
-    if os.path.exists(settings.posts_file):
+    if settings.posts_file and os.path.exists(settings.posts_file):
         post_files = open(settings.posts_file, "r", encoding="utf-8").readlines()
     
-    search_queries = open(settings.search_query_file, "r", encoding="utf-8").readlines()
+    search_queries = open(settings.search_query_file, "r", encoding="utf-8").readlines() if settings.search_query_file and os.path.exists(settings.search_query_file) else []
     
     if isinstance(accounts, str): accounts = [accounts]
     if isinstance(proxies, str): proxies = [proxies]
