@@ -5,6 +5,8 @@
 # ============================================================
 
 set -e
+# Pastikan error tidak tersembunyi
+trap 'echo -e "\n\033[0;31m[ERROR] Instalasi gagal di baris $LINENO. Baca pesan error di atas.\033[0m\n"; exit 1' ERR
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
