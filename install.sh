@@ -51,7 +51,7 @@ echo -e "${YELLOW}[4/6] Menginstall Python packages...${NC}"
 # instagrapi==1.16.0 → versi stabil terakhir sebelum pindah ke pydantic v2
 pip install -q \
     "pydantic==1.9.2" \
-    "instagrapi==1.16.0" \
+    "instagrapi<2" \
     colorama \
     pyTelegramBotAPI \
     anticaptchaofficial \
