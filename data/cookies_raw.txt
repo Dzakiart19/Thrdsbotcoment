@@ -1,16 +1,15 @@
 # Raw cookies dari HTTP request capture (gateway.threads.com)
-# Diperbarui: 2026-07-26 (request ke-3)
+# Diperbarui: 2026-07-26 (akun lebiyan.yy)
 
 ig_did=C68D6EDB-1178-481A-A662-59D844DB8177
 dpr=2.0375001430511475
 mid=amMkeAABAAEuYMSZRvPe1pi9_MVb
 ps_l=1
 ps_n=1
-ds_user_id=40126635242
-csrftoken=D7G8jqNeyVN9LWlANykVfwsCWgCEnlQZ
-sessionid=40126635242%3ADPa9IQ0a6yA1HC%3A28%3AAYiPq7K2ZlJVd4RGypmVlOASi0PwbgyrUpd0JLpisw
-rur="CCO\05440126635242\0541816571118:01ff88647e6c98892b713d6c5d4dcb663bf6270e102fda1ae8c484cce93d5adb97bf576c"
+csrftoken=uHHkLUEc2WqE112lmpkOrSyhtiYSUrId
+ds_user_id=48191362743
+sessionid=48191362743%3AYbjHoNDZEV8sg4%3A8%3AAYjs0LUvLw5_FqrXbW1X32reyUJDTI8CTdldvlUpxQ
 
-# x-dgw-deviceid: 4d750247-604b-4a00-8dea-25056259fcc1
-# x-dgw-uuid   : 17841440177265829
-# x-ig-app-id  : 1412234116260832
+# x-dgw-deviceid: aaa5bb86-19a7-479a-b0ef-3dd2c7648120
+# x-dgw-uuid   : 17841448082313920
+# x-dgw-app-id : 1412234116260832

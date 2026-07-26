@@ -963,7 +963,7 @@ def upload(username, password, email, email_password, proxy, thread_index: int, 
                     else:
                         st.log_warn(f"Post failed: {post_status}")
 
-                    sleep_s = random.randint(60, 120)
+                    sleep_s = 300  # 5 menit antar komentar
                     st.set_status("sleeping"); st.log_info(f"Sleeping {sleep_s}s before next comment")
                     time.sleep(sleep_s)
                     st.set_status("running")

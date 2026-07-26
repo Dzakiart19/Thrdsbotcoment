@@ -1,4 +1,4 @@
-GET /ws/lightspeed?x-dgw-appid=1412234116260832&x-dgw-appversion=0&x-dgw-authtype=6:0&x-dgw-version=5&x-dgw-uuid=17841440177265829&x-dgw-tier=prod&x-dgw-deviceid=4d750247-604b-4a00-8dea-25056259fcc1 HTTP/1.1
+GET /ws/streamcontroller?x-dgw-appid=1412234116260832&x-dgw-appversion=0&x-dgw-authtype=6:0&x-dgw-version=5&x-dgw-uuid=17841448082313920&x-dgw-tier=prod&x-dgw-deviceid=aaa5bb86-19a7-479a-b0ef-3dd2c7648120&x-dgw-app-stream-group=group1 HTTP/1.1
 Host: gateway.threads.com
 Connection: Upgrade
 Pragma: no-cache
@@ -9,15 +9,15 @@ Origin: https://www.threads.com
 Sec-WebSocket-Version: 13
 Accept-Encoding: gzip, deflate, br
 Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7
-Cookie: ig_did=C68D6EDB-1178-481A-A662-59D844DB8177; dpr=2.0375001430511475; mid=amMkeAABAAEuYMSZRvPe1pi9_MVb; ps_l=1; ps_n=1; ds_user_id=40126635242; csrftoken=D7G8jqNeyVN9LWlANykVfwsCWgCEnlQZ; sessionid=40126635242%3ADPa9IQ0a6yA1HC%3A28%3AAYiPq7K2ZlJVd4RGypmVlOASi0PwbgyrUpd0JLpisw; rur="CCO\05440126635242\0541816571118:01ff88647e6c98892b713d6c5d4dcb663bf6270e102fda1ae8c484cce93d5adb97bf576c"
-Sec-WebSocket-Key: diGxWOJluBQA1I3OsEPDuw==
+Cookie: ig_did=C68D6EDB-1178-481A-A662-59D844DB8177; dpr=2.0375001430511475; mid=amMkeAABAAEuYMSZRvPe1pi9_MVb; ps_l=1; ps_n=1; csrftoken=uHHkLUEc2WqE112lmpkOrSyhtiYSUrId; ds_user_id=48191362743; sessionid=48191362743%3AYbjHoNDZEV8sg4%3A8%3AAYjs0LUvLw5_FqrXbW1X32reyUJDTI8CTdldvlUpxQ
+Sec-WebSocket-Key: P6ed/mx2pWpFBdjMVg0oPg==
 Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
 
 # ── Extracted credentials ─────────────────────────────────────────────────────
-# ds_user_id : 40126635242
-# sessionid  : 40126635242%3ADPa9IQ0a6yA1HC%3A28%3AAYiPq7K2ZlJVd4RGypmVlOASi0PwbgyrUpd0JLpisw
-# csrftoken  : D7G8jqNeyVN9LWlANykVfwsCWgCEnlQZ
+# username   : lebiyan.yy
+# ds_user_id : 48191362743
+# sessionid  : 48191362743%3AYbjHoNDZEV8sg4%3A8%3AAYjs0LUvLw5_FqrXbW1X32reyUJDTI8CTdldvlUpxQ
+# csrftoken  : uHHkLUEc2WqE112lmpkOrSyhtiYSUrId
 # ig_did     : C68D6EDB-1178-481A-A662-59D844DB8177
 # mid        : amMkeAABAAEuYMSZRvPe1pi9_MVb
-# deviceid   : 4d750247-604b-4a00-8dea-25056259fcc1
-# rur        : CCO\05440126635242\0541816571118:01ff88647e6c98892b713d6c5d4dcb663bf6270e102fda1ae8c484cce93d5adb97bf576c
+# deviceid   : aaa5bb86-19a7-479a-b0ef-3dd2c7648120
