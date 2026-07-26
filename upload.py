@@ -164,6 +164,25 @@ class Threads():
         self.challenge = custom_challenge.ChallengeResolveMixin()
         self.battery_level = random.randint(30, 80)
 
+    def login_with_web_session(self, ds_user_id: str, sessionid: str):
+        """Login using raw browser cookies (ds_user_id + sessionid from DevTools).
+        No session file needed — just paste the cookies from a captured request.
+        Account format: username:WEB_SESSION:ds_user_id:sessionid
+        """
+        import base64 as _b64
+
+        self.user_id = int(ds_user_id)
+
+        token_payload = json.dumps({
+            "ds_user_id": ds_user_id,
+            "sessionid": urllib.parse.unquote(sessionid),
+            "should_use_header_over_cookies": True,
+        }, separators=(",", ":"))
+        self.token = _b64.b64encode(token_payload.encode()).decode().rstrip("=")
+
+        self.auth_session.cookies.set("sessionid", urllib.parse.unquote(sessionid), domain=".instagram.com")
+        self.auth_session.cookies.set("ds_user_id", ds_user_id, domain=".instagram.com")
+
     def login_with_session_file(self, session_file: str, sessionid: str):
         """Login using a saved instagrapi session file.
         Constructs the Bearer token directly from session data (base64 encode)
@@ -725,6 +744,12 @@ def upload(username, password, email, email_password, proxy, thread_index: int, 
             session_file = email
             sessionid    = email_password
             threads.login_with_session_file(session_file, sessionid)
+        elif password == "WEB_SESSION":
+            # accounts.txt format: username:WEB_SESSION:ds_user_id:sessionid
+            # Credentials copied directly from browser DevTools (cookie header)
+            ds_user_id = email
+            sessionid  = email_password
+            threads.login_with_web_session(ds_user_id, sessionid)
         else:
             threads.login(username, password, email, email_password)
     else:
@@ -895,8 +920,8 @@ def upload(username, password, email, email_password, proxy, thread_index: int, 
                 Logger.Log(f"[thread#{thread_index}] Account logged out @{username}", Fore.RED)
                 return "logged_out", successful_posts
             else:
-                # SESSION_FILE accounts cannot relogin via username/password
-                if password == "SESSION_FILE":
+                # SESSION_FILE / WEB_SESSION accounts cannot relogin via username/password
+                if password in ("SESSION_FILE", "WEB_SESSION"):
                     Logger.Log(f"[thread#{thread_index}] Session expired — cannot relogin @{username}", Fore.RED)
                     return "logged_out", successful_posts
                 Logger.Log(f"[thread#{thread_index}] Trying relogin @{username}", Fore.YELLOW)
