@@ -2,6 +2,11 @@
 Entry point for the Threads automation tool.
 Reads settings from ./data/settings.json (or prompts to create one),
 then launches upload_manager threads as configured.
+
+A lightweight Flask health server is started first so that:
+  - Autoscale deployments pass health checks
+  - External cronjob (e.g. UptimeRobot / cron-job.org) can ping /health
+    to keep the container warm
 """
 
 import os
@@ -9,6 +14,7 @@ import json
 import multiprocessing
 from settings import Settings
 from upload import upload_manager
+from health import start_health_server
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
@@ -32,13 +38,20 @@ def create_default_settings():
 
 
 def main():
+    # ── Start health server (non-blocking) ───────────────────────────────────
+    start_health_server(host="0.0.0.0", port=5000)
+
     ensure_data_dir()
 
     settings_path = os.path.join(DATA_DIR, "settings.json")
     if not os.path.exists(settings_path):
         print(f"[INFO] settings.json not found at {settings_path}")
         create_default_settings()
-        return
+        # Keep health server alive even when bot is not configured
+        import time
+        print("[INFO] Health server is running. Edit settings.json and restart.")
+        while True:
+            time.sleep(60)
 
     settings = Settings()
     print(f"[INFO] Loaded settings — threads={settings.threads}, comments={settings.comments}")

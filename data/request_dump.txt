@@ -1,37 +1,22 @@
-POST /api/graphql HTTP/2
-host: www.threads.com
-content-length: 1622
-sec-ch-ua: "Chromium";v="137", "Not/A)Brand";v="24"
-sec-ch-ua-model: "2311DRK48G"
-x-ig-app-id: 1412234116260832
-x-web-session-id: 762zek:64ajl6:emtacf
-sec-ch-ua-mobile: ?1
-user-agent: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36
-x-fb-friendly-name: useBarcelonaTagsNullstateGraphQLDataSourceQuery
-x-fb-lsd: Fvh-1IPzDHEPJEXigVljRS
-sec-ch-ua-platform-version: "16.0.0"
-content-type: application/x-www-form-urlencoded
-x-asbd-id: 359341
-sec-ch-ua-full-version-list: "Chromium";v="137.0.7337.0", "Not/A)Brand";v="24.0.0.0"
-sec-ch-prefers-color-scheme: dark
-x-csrftoken: D7G8jqNeyVN9LWlANykVfwsCWgCEnlQZ
-sec-ch-ua-platform: "Android"
-accept: */*
-origin: https://www.threads.com
-sec-fetch-site: same-origin
-sec-fetch-mode: cors
-sec-fetch-dest: empty
-referer: https://www.threads.com/@shadowheist08/post/DDRHPxSB1sJ
-accept-encoding: gzip, deflate, br
-accept-language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7
-cookie: ig_did=C68D6EDB-1178-481A-A662-59D844DB8177
-cookie: dpr=2.0375001430511475
-cookie: mid=amMkeAABAAEuYMSZRvPe1pi9_MVb
-cookie: ps_l=1
-cookie: ps_n=1
-cookie: ds_user_id=40126635242
-cookie: csrftoken=D7G8jqNeyVN9LWlANykVfwsCWgCEnlQZ
-cookie: sessionid=40126635242%3ADPa9IQ0a6yA1HC%3A28%3AAYiPq7K2ZlJVd4RGypmVlOASi0PwbgyrUpd0JLpisw
-cookie: rur="CCO\05440126635242\0541816566270:01ff304fca83e5bef5745c89402baa2ab5392fd9335f81557615f34b81ed06b6e746d8fa"
+GET /ws/lightspeed?x-dgw-appid=1412234116260832&x-dgw-appversion=0&x-dgw-authtype=6:0&x-dgw-version=5&x-dgw-uuid=17841440177265829&x-dgw-tier=prod&x-dgw-deviceid=a25da6bd-8e82-45e4-b016-da6c4a401c8b HTTP/1.1
+Host: gateway.threads.com
+Connection: Upgrade
+Pragma: no-cache
+Cache-Control: no-cache
+User-Agent: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36
+Upgrade: websocket
+Origin: https://www.threads.com
+Sec-WebSocket-Version: 13
+Accept-Encoding: gzip, deflate, br
+Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: ig_did=C68D6EDB-1178-481A-A662-59D844DB8177; dpr=2.0375001430511475; mid=amMkeAABAAEuYMSZRvPe1pi9_MVb; ps_l=1; ps_n=1; ds_user_id=40126635242; csrftoken=D7G8jqNeyVN9LWlANykVfwsCWgCEnlQZ; sessionid=40126635242%3ADPa9IQ0a6yA1HC%3A28%3AAYiPq7K2ZlJVd4RGypmVlOASi0PwbgyrUpd0JLpisw; rur="CCO\05440126635242\0541816570431:01ff5f9d02c74721fbcaa853b823d0922ec3da1710d892cf56488fe315ef327396264b20"
+Sec-WebSocket-Key: dhYGMuYnW0yVW3elC/NTIw==
+Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
 
-av=17841440177265829&__user=0&__a=1&__req=c&__hs=20660.HYP%3Abarcelona_web_pkg.2.1...0&dpr=3&__ccg=MODERATE&__rev=1043857760&__s=762zek%3A64ajl6%3Aemtacf&__hsi=7666646616299528836&__dyn=7xeUmwlEnwn8K2Wmh0no6u5U4e0yoW3q32360CEbo1nEhw2nVE4W0qa0FE2awgo9oO0n24oaEd82lwv89k2C1Fwc60D85m1mzXwae4UaEW0Loco5G0zK5o4q0HU420n6azo7u0zE2ZwrUK2K2WE15E6O1FwCxC5E8o4J08q2K7E4u8Dxd0LCwmo2own8661Uw7cwkE423m&__csr=iIv2c9NTsVeTklH9O_-yFWlOqp9-CzyB5KQG9BDiioX-eQitkuFFUF4AyaqYHmyh6ECiUyfx3AzE9EOaAJ2UFeKuLGq2K8zUixCayoK2u1Pw0oD8018hU12sE31wLAz9U2a-0hm0-Q6A0i4qt39C0P821w67wlU0Dm0l-04iA0mx0wwt8colxvo21U2tw3mkq2Si0I81cozxiE8e14y83QyUCfGltRc3-9z9CVD4G54y5ygM0LUC24l804bk3e1egeES0yAA00wKEkxO&__hsdp=gs9c115b0qY2k2D3czKtiH4Cf0CQe8E6a8qbpO2asc9dkg8ia9ykt4gOkgDaE8GqxcQmR8s28Exchjof63IVQ0gS28xj3UFc4UN0TwgT20G0yA2aA3-0RS0rG2q3q1uwqOw2Ponrw1Ny0z81ho1yU3OwvE3Uwuo0zG0zE7C0bIg&__hblp=02boC0nK3C1jwqU2fxu0Zp84q3u1txWmaz86i2q2m3W0SE2WwRwamm7E9EdGwmU4i2qU0wW17g7m7o0jiw9m0cFwzwQwpU-6o3Vwfa3y15wv85a2y1VCwExuuE1C84W0zE1I85S320ip043w&__sjsp=gs70ghiM6L0B0FMP8XyOb4Cf3I5Z0tUxEJD88FMMARh0x8EjgS5ktk1fe&__comet_req=29&fb_dtsg=NAfwA9lofv2gvxkB71_bz5Syd4q2pdEi8R0q16S1Y06Cftc3RQcJVWQ%3A17843709688147332%3A1784964030&jazoest=26151&lsd=Fvh-1IPzDHEPJEXigVljRS&__spin_r=1043857760&__spin_b=trunk&__spin_t=1785030266&__crn=comet.threads.BarcelonaPostColumnRoute&fb_api_caller_class=RelayModern&fb_api_req_friendly_name=useBarcelonaTagsNullstateGraphQLDataSourceQuery&server_timestamps=true&variables=%7B%22has_composer_flair%22%3Afalse%2C%22has_favicons%22%3Afalse%2C%22has_top_contributors%22%3Afalse%2C%22include_social_context%22%3Atrue%7D&doc_id=27842269348718776
+# ── Extracted credentials ─────────────────────────────────────────────────────
+# ds_user_id : 40126635242
+# sessionid  : 40126635242%3ADPa9IQ0a6yA1HC%3A28%3AAYiPq7K2ZlJVd4RGypmVlOASi0PwbgyrUpd0JLpisw
+# csrftoken  : D7G8jqNeyVN9LWlANykVfwsCWgCEnlQZ
+# ig_did     : C68D6EDB-1178-481A-A662-59D844DB8177
+# mid        : amMkeAABAAEuYMSZRvPe1pi9_MVb
+# rur        : CCO\05440126635242\0541816570431:01ff5f9d02c74721fbcaa853b823d0922ec3da1710d892cf56488fe315ef327396264b20

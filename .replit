@@ -26,3 +26,7 @@ outputType = "console"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "uv run python3 main.py"
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["uv", "run", "python3", "main.py"]
