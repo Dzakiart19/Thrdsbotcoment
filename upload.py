@@ -1,5 +1,6 @@
 from fake_client import FakeClient as Client, ChallengeRequired, ChallengeUnknownStep, json_value
 import random, requests, string, time, json, urllib, urllib.parse, uuid, mimetypes, os, datetime, sqlite3, multiprocessing, custom_challenge, traceback
+import stats_tracker as st
 
 # Cross-platform data directory (works on Linux/Replit and Windows)
 _DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
@@ -254,7 +255,9 @@ class Threads():
         if r.status_code == 429 or (r.status_code in (429, 503) and "<!DOCTYPE" in r.text):
             wait = random.randint(60, 120)
             Logger.Log(f"[thread#{self.thread_index}] 429 rate-limit, sleeping {wait}s…", Fore.YELLOW)
+            st.inc_rate_limit(); st.set_status("rate_limited"); st.log_warn(f"429 rate-limit — sleeping {wait}s")
             time.sleep(wait)
+            st.set_status("running")
             r = self.auth_session.post(url, params=params, headers=headers, data=body)
             self.last_response = r
 
@@ -328,7 +331,9 @@ class Threads():
         if r.status_code == 429 or (r.status_code in (429, 503) and "<!DOCTYPE" in r.text):
             wait = random.randint(60, 120)
             Logger.Log(f"[thread#{self.thread_index}] 429 rate-limit, sleeping {wait}s…", Fore.YELLOW)
+            st.inc_rate_limit(); st.set_status("rate_limited"); st.log_warn(f"429 rate-limit — sleeping {wait}s")
             time.sleep(wait)
+            st.set_status("running")
             r = self.auth_session.get(url, params=params, headers=headers)
             self.last_response = r
 
@@ -760,6 +765,7 @@ def upload(username, password, email, email_password, proxy, thread_index: int, 
         proxy = proxy.split("|")[0]
     
     Logger.Log(f"[thread#{thread_index}] Started @{username}", Fore.GREEN)
+    st.reset(); st.set_status("starting", username); st.log_info(f"Started @{username}")
     threads = Threads(proxy=proxy, key=captcha_key, thread_index=thread_index, serialized_settings=serialized_settings)
     if cookies == "":
         if password == "SESSION_FILE":
@@ -787,6 +793,7 @@ def upload(username, password, email, email_password, proxy, thread_index: int, 
             threads.global_extra_header = iam["cookies"]
             threads.token = iam["cookies"]["Authorization"].split("Bearer IGT:2:")[1]
     Logger.Log(f"[thread#{thread_index}] Loggined @{username}", Fore.GREEN)
+    st.set_status("running", username); st.log_info(f"Logged in @{username}")
 
     # Startup delay — beri jeda sebelum hit API pertama kali
     # untuk menghindari 429 rate-limit akibat restart cepat
@@ -938,24 +945,34 @@ def upload(username, password, email, email_password, proxy, thread_index: int, 
                         if threads.get_views(id) < min_views_on_post: failed_text.append("views")
 
                         Logger.Log(f"[thread#{thread_index}] Requirements not match: {', '.join(failed_text)}", Fore.YELLOW)
+                        st.inc_scanned(); st.inc_skip()
 
                         empty_pages += 1
                         continue
                     
                     uploaded_id.append(id)
-                    
+                    st.inc_scanned()
+
                     post_status = threads.post(caption=random.choice(captions), image_path=None if (not set_image_on_rec and spam_method == 0) or (not set_image_on_warm and spam_method in [1, 2]) else images, parent_post_id=id, disable_comments=disable_comments)[1]["status"]
                     Logger.Log(f"[thread#{thread_index}] Post status : {post_status} ({successful_posts+1}/{comment_count})", Fore.GREEN)
                     
                     if post_status == "ok":
                         successful_posts += 1
                         relogged = False
-                    
-                    time.sleep(random.randint(60, 120))
+                        st.inc_comments(); st.log_info(f"✓ Comment #{successful_posts} posted on post {id}")
+                    else:
+                        st.log_warn(f"Post failed: {post_status}")
+
+                    sleep_s = random.randint(60, 120)
+                    st.set_status("sleeping"); st.log_info(f"Sleeping {sleep_s}s before next comment")
+                    time.sleep(sleep_s)
+                    st.set_status("running")
                     
                     posts_counts += 1
                     if posts_counts >= comment_count: break
-                except Exception as e: Logger.Log(f"[thread#{thread_index}] {repr(e)}", Fore.RED)
+                except Exception as e:
+                    Logger.Log(f"[thread#{thread_index}] {repr(e)}", Fore.RED)
+                    st.inc_error(); st.log_error(repr(e))
             if posts_counts >= comment_count: break
         except LogoutException as e:
             last_exception = e
@@ -985,6 +1002,7 @@ def upload(username, password, email, email_password, proxy, thread_index: int, 
         except Exception as e:
             last_exception = e
             Logger.Log(f"[thread#{thread_index}] {repr(e)}", Fore.RED)
+            st.inc_error(); st.log_error(repr(e))
     
     if posts_counts >= comment_count:
         with open(os.path.join(_history_dir, "successful_all.txt"), "a") as f:
@@ -996,6 +1014,7 @@ def upload(username, password, email, email_password, proxy, thread_index: int, 
             f.write(f"{username}:{password}" + (f":{email}:{email_password}" if len(email) > 0 else "") + f" - {successful_posts}" + (f" | {repr(last_exception)}" if last_exception is not None else "") + (f" | {threads.last_response.text}" if threads.last_response is not None else "") + "\n")
     
     Logger.Log(f"[thread#{thread_index}] Finished upload @{username}", Fore.GREEN)
+    st.set_status("stopped"); st.log_info(f"Finished @{username} — {successful_posts} comments sent")
     return "ok", successful_posts
 
 
