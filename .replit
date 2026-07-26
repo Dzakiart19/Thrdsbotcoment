@@ -20,9 +20,9 @@ args = "Run Threads Bot"
 name = "Run Threads Bot"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python3 main.py"
-
 [workflows.workflow.metadata]
 outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "uv run python3 main.py"
