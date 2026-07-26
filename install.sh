@@ -47,14 +47,45 @@ fi
 # ── 4. Install Python packages ───────────────────────────
 echo -e "${YELLOW}[4/6] Menginstall Python packages...${NC}"
 # Catatan: JANGAN upgrade pip di Termux (dilarang)
-# Pin pydantic<2 agar tidak perlu compile Rust (pydantic-core)
+# pydantic==1.9.2 → tidak ada strict check_fields (aman untuk instagrapi<2)
+# instagrapi==1.16.0 → versi stabil terakhir sebelum pindah ke pydantic v2
 pip install -q \
-    "pydantic<2" \
-    "instagrapi<2" \
+    "pydantic==1.9.2" \
+    "instagrapi==1.16.0" \
     colorama \
     pyTelegramBotAPI \
     anticaptchaofficial \
     requests
+
+# ── Patch instagrapi untuk Python 3.10+ compatibility ──
+echo "  → Patching instagrapi untuk kompatibilitas pydantic..."
+python3 - <<'PYEOF'
+import site, os
+
+patched_any = False
+for sp in site.getsitepackages():
+    types_file = os.path.join(sp, 'instagrapi', 'types.py')
+    if not os.path.exists(types_file):
+        continue
+    with open(types_file, 'r') as f:
+        content = f.read()
+    # Tambah check_fields=False ke semua validator yang bermasalah
+    import re
+    new_content = re.sub(
+        r'@validator\(("external_url"|"thumbnail_url"|"profile_pic_url"|"hd_profile_pic_url_info")([^)]*)\)',
+        lambda m: f'@validator({m.group(1)}{m.group(2)}, check_fields=False)' if 'check_fields' not in m.group(0) else m.group(0),
+        content
+    )
+    if new_content != content:
+        with open(types_file, 'w') as f:
+            f.write(new_content)
+        print("  ✓ instagrapi/types.py berhasil di-patch")
+        patched_any = True
+    break
+
+if not patched_any:
+    print("  → Tidak ada patch yang diperlukan")
+PYEOF
 
 # ── 5. Setup direktori data ──────────────────────────────
 echo -e "${YELLOW}[5/6] Menyiapkan direktori data...${NC}"
