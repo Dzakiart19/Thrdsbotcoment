@@ -249,8 +249,16 @@ class Threads():
         self.last_response = r
         if "rupload_igphoto" not in url:
             Logger.LogFile(f"[thread#{self.thread_index}] Response={r.text}")
-        
-        if "not-logged-in" in r.text or "no-js" in r.text or "login_required" in r.text:
+
+        # 429 rate-limit — back off and retry once
+        if r.status_code == 429 or (r.status_code in (429, 503) and "<!DOCTYPE" in r.text):
+            wait = random.randint(60, 120)
+            Logger.Log(f"[thread#{self.thread_index}] 429 rate-limit, sleeping {wait}s…", Fore.YELLOW)
+            time.sleep(wait)
+            r = self.auth_session.post(url, params=params, headers=headers, data=body)
+            self.last_response = r
+
+        if "not-logged-in" in r.text or "login_required" in r.text:
             raise LogoutException()
         if "https://www.instagram.com/accounts/suspended/" in r.text:
             raise AccountSuspendedException()
@@ -315,8 +323,16 @@ class Threads():
             raise Exception(f"All 5 GET attempts failed for {url}")
         self.last_response = r
         Logger.LogFile(f"[thread#{self.thread_index}] Response={r.text}")
-        
-        if "not-logged-in" in r.text or "no-js" in r.text or "login_required" in r.text:
+
+        # 429 rate-limit — back off and retry once
+        if r.status_code == 429 or (r.status_code in (429, 503) and "<!DOCTYPE" in r.text):
+            wait = random.randint(60, 120)
+            Logger.Log(f"[thread#{self.thread_index}] 429 rate-limit, sleeping {wait}s…", Fore.YELLOW)
+            time.sleep(wait)
+            r = self.auth_session.get(url, params=params, headers=headers)
+            self.last_response = r
+
+        if "not-logged-in" in r.text or "login_required" in r.text:
             raise LogoutException()
         if "https://www.instagram.com/accounts/suspended/" in r.text:
             raise AccountSuspendedException()
@@ -771,6 +787,12 @@ def upload(username, password, email, email_password, proxy, thread_index: int, 
             threads.global_extra_header = iam["cookies"]
             threads.token = iam["cookies"]["Authorization"].split("Bearer IGT:2:")[1]
     Logger.Log(f"[thread#{thread_index}] Loggined @{username}", Fore.GREEN)
+
+    # Startup delay — beri jeda sebelum hit API pertama kali
+    # untuk menghindari 429 rate-limit akibat restart cepat
+    startup_wait = random.randint(10, 30)
+    Logger.Log(f"[thread#{thread_index}] Startup delay {startup_wait}s…", Fore.CYAN)
+    time.sleep(startup_wait)
 
     today = datetime.datetime.now()
     

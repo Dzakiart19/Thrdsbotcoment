@@ -1,6 +1,5 @@
-# Raw cookies dari HTTP request capture (www.threads.com / gateway.threads.com)
-# Digunakan sebagai referensi untuk login WEB_SESSION
-# Diperbarui: 2026-07-26
+# Raw cookies dari HTTP request capture (gateway.threads.com)
+# Diperbarui: 2026-07-26 (request ke-3)
 
 ig_did=C68D6EDB-1178-481A-A662-59D844DB8177
 dpr=2.0375001430511475
@@ -10,11 +9,8 @@ ps_n=1
 ds_user_id=40126635242
 csrftoken=D7G8jqNeyVN9LWlANykVfwsCWgCEnlQZ
 sessionid=40126635242%3ADPa9IQ0a6yA1HC%3A28%3AAYiPq7K2ZlJVd4RGypmVlOASi0PwbgyrUpd0JLpisw
-rur="CCO\05440126635242\0541816570431:01ff5f9d02c74721fbcaa853b823d0922ec3da1710d892cf56488fe315ef327396264b20"
+rur="CCO\05440126635242\0541816571118:01ff88647e6c98892b713d6c5d4dcb663bf6270e102fda1ae8c484cce93d5adb97bf576c"
 
-# Headers lain yang relevan:
-# x-dgw-uuid    : 17841440177265829
-# x-dgw-deviceid: a25da6bd-8e82-45e4-b016-da6c4a401c8b
-# x-ig-app-id   : 1412234116260832
-# x-csrftoken   : D7G8jqNeyVN9LWlANykVfwsCWgCEnlQZ
-# user-agent    : Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36
+# x-dgw-deviceid: 4d750247-604b-4a00-8dea-25056259fcc1
+# x-dgw-uuid   : 17841440177265829
+# x-ig-app-id  : 1412234116260832
