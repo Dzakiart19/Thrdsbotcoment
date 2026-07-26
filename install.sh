@@ -31,7 +31,7 @@ pkg update -y -q && pkg upgrade -y -q
 
 # ── 2. Install system dependencies ───────────────────────
 echo -e "${YELLOW}[2/6] Menginstall dependensi sistem...${NC}"
-pkg install -y -q python git libxml2 libxslt openssl
+pkg install -y -q python git libxml2 libxslt openssl libjpeg-turbo python-pillow
 
 # ── 3. Clone / update repo ───────────────────────────────
 echo -e "${YELLOW}[3/6] Mengunduh project dari GitHub...${NC}"
@@ -53,7 +53,6 @@ pip install -q \
     "instagrapi<2" \
     colorama \
     pyTelegramBotAPI \
-    Pillow \
     anticaptchaofficial \
     requests
 
