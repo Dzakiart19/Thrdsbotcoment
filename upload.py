@@ -548,19 +548,24 @@ class Threads():
         return None
     
     def get_views(self, post_id: str | int) -> int:
-        return int(self.post_private_request("https://i.instagram.com/graphql/query", None, self.generate_headers(), {
-            "method": "post",
-            "pretty": "false",
-            "format": "json",
-            "server_timestamps": "true",
-            "locale": "user",
-            "fb_api_req_friendly_name": "PostLiveMetricsQuery",
-            "client_doc_id": "88872704915828488118363430539",
-            "enable_canonical_naming": "true",
-            "enable_canonical_variable_overrides": "true",
-            "enable_canonical_naming_ambiguous_type_prefixing": "true",
-            "variables": '{"post_ids":["' + str(post_id) + '"]}'
-        }).text.split('"impression_count":')[1].split("}")[0])
+        try:
+            raw = self.post_private_request("https://i.instagram.com/graphql/query", None, self.generate_headers(), {
+                "method": "post",
+                "pretty": "false",
+                "format": "json",
+                "server_timestamps": "true",
+                "locale": "user",
+                "fb_api_req_friendly_name": "PostLiveMetricsQuery",
+                "client_doc_id": "88872704915828488118363430539",
+                "enable_canonical_naming": "true",
+                "enable_canonical_variable_overrides": "true",
+                "enable_canonical_naming_ambiguous_type_prefixing": "true",
+                "variables": '{"post_ids":["' + str(post_id) + '"]}'
+            }).text
+            val = raw.split('"impression_count":')[1].split("}")[0].strip()
+            return int(val) if val not in ("null", "None", "") else 0
+        except Exception:
+            return 0
 
     def users_search(self, query: str):
         return self.get_private_request(f"{BASE_URL}/users/search/?q={query}", None, self.generate_headers()).json()
@@ -730,7 +735,7 @@ def remove_account(account):
     
     conn.close()
 
-def upload(username, password, email, email_password, proxy, thread_index: int, captions: list = [], images: str | list | None = None, comment_count: int = 20, search_query: str | None = None, spam_method: int = 0, captcha_key: str = "", cookies: str = "", serialized_settings: str = "", telegram_token: str = "", telegram_chat_id: str = "", original_spam_method: int = 0, max_time_seconds: int = 0, minimum_likes: int = 0, minimum_replies: int = 0, disable_comments: bool = False, avatar_folder: str = "", max_posts_on_post: int = 3, min_views_on_post: int = 500, post_links: list = [], set_image_on_rec: bool = True, set_image_on_warm: bool = True):
+def upload(username, password, email, email_password, proxy, thread_index: int, captions: list = [], images: str | list | None = None, comment_count: int = 20, search_query: str | None = None, spam_method: int = 0, captcha_key: str = "", cookies: str = "", serialized_settings: str = "", telegram_token: str = "", telegram_chat_id: str = "", original_spam_method: int = 0, max_time_seconds: int = 0, minimum_likes: int = 0, minimum_replies: int = 0, disable_comments: bool = False, avatar_folder: str = "", max_posts_on_post: int = 3, min_views_on_post: int = 500, post_links: list = [], set_image_on_rec: bool = True, set_image_on_warm: bool = True, search_queries: list = []):
     last_exception = None
 
     if proxy is not None and "|" in proxy:
@@ -871,7 +876,14 @@ def upload(username, password, email, email_password, proxy, thread_index: int, 
                 max_id = None
                 rank_token = None
                 page_token = None
-                empty_pages = 200
+                empty_pages += 1
+                # Rotate to a different search query after 5 empty pages
+                if spam_method != 0 and empty_pages >= 5 and search_queries:
+                    search_query = random.choice(search_queries).strip()
+                    Logger.Log(f"[thread#{thread_index}] Switching query → {search_query}", Fore.CYAN)
+                    empty_pages = 0
+                elif empty_pages >= 200:
+                    empty_pages = 200
                 continue
 
             Logger.Log(f"[thread#{thread_index}] Received {len(feed_items) + len(thread_items)} posts", Fore.GREEN)
@@ -1084,9 +1096,9 @@ def upload_manager(serialized_settings: str, thread_index):
         post_count = 0
         try:
             if "Bearer IGT:2:" not in account:
-                state, post_count = upload(account.split(":")[0].strip(), account.split(":")[1].strip(), account.split(":")[2].strip(), account.split(":")[3].strip(), proxies[index % len(proxies)] if len(proxies) > 0 else None, thread_index, texts, images, settings.comments, random.choice(search_queries).strip() if len(search_queries) > 0 else None, settings.spam_method, settings.captcha_key, serialized_settings=serialized_settings, telegram_token=settings.telegram_token, telegram_chat_id=settings.telegram_chat_id, original_spam_method=settings.spam_method, max_time_seconds=settings.max_time_seconds, minimum_likes=settings.minimum_likes, minimum_replies=settings.minimum_replies, disable_comments=settings.disable_comments, avatar_folder=settings.avatar_folder, max_posts_on_post=settings.max_posts_on_post, min_views_on_post=settings.min_views_on_post, post_links=post_files, set_image_on_rec=settings.set_image_on_rec, set_image_on_warm=settings.set_image_on_warm)
+                state, post_count = upload(account.split(":")[0].strip(), account.split(":")[1].strip(), account.split(":")[2].strip(), account.split(":")[3].strip(), proxies[index % len(proxies)] if len(proxies) > 0 else None, thread_index, texts, images, settings.comments, random.choice(search_queries).strip() if len(search_queries) > 0 else None, settings.spam_method, settings.captcha_key, serialized_settings=serialized_settings, telegram_token=settings.telegram_token, telegram_chat_id=settings.telegram_chat_id, original_spam_method=settings.spam_method, max_time_seconds=settings.max_time_seconds, minimum_likes=settings.minimum_likes, minimum_replies=settings.minimum_replies, disable_comments=settings.disable_comments, avatar_folder=settings.avatar_folder, max_posts_on_post=settings.max_posts_on_post, min_views_on_post=settings.min_views_on_post, post_links=post_files, set_image_on_rec=settings.set_image_on_rec, set_image_on_warm=settings.set_image_on_warm, search_queries=search_queries)
             else:
-                state, post_count = upload(account.split(":")[0].strip(), account.split(":")[1].split("|")[0].strip(), "", "", proxies[index % len(proxies)] if len(proxies) > 0 else None, thread_index, texts, images, settings.comments, random.choice(search_queries).strip() if len(search_queries) > 0 else None, settings.spam_method, settings.captcha_key, account, serialized_settings=serialized_settings, telegram_token=settings.telegram_token, telegram_chat_id=settings.telegram_chat_id, original_spam_method=settings.spam_method, max_time_seconds=settings.max_time_seconds, minimum_likes=settings.minimum_likes, minimum_replies=settings.minimum_replies, disable_comments=settings.disable_comments, avatar_folder=settings.avatar_folder, max_posts_on_post=settings.max_posts_on_post, min_views_on_post=settings.min_views_on_post, post_links=post_files, set_image_on_rec=settings.set_image_on_rec, set_image_on_warm=settings.set_image_on_warm)
+                state, post_count = upload(account.split(":")[0].strip(), account.split(":")[1].split("|")[0].strip(), "", "", proxies[index % len(proxies)] if len(proxies) > 0 else None, thread_index, texts, images, settings.comments, random.choice(search_queries).strip() if len(search_queries) > 0 else None, settings.spam_method, settings.captcha_key, account, serialized_settings=serialized_settings, telegram_token=settings.telegram_token, telegram_chat_id=settings.telegram_chat_id, original_spam_method=settings.spam_method, max_time_seconds=settings.max_time_seconds, minimum_likes=settings.minimum_likes, minimum_replies=settings.minimum_replies, disable_comments=settings.disable_comments, avatar_folder=settings.avatar_folder, max_posts_on_post=settings.max_posts_on_post, min_views_on_post=settings.min_views_on_post, post_links=post_files, set_image_on_rec=settings.set_image_on_rec, set_image_on_warm=settings.set_image_on_warm, search_queries=search_queries)
         except Exception as e: 
             Logger.LogFile(f"[#thread{thread_index}] {traceback.format_exc()}")
             Logger.Log(f"[#thread{thread_index}] {repr(e)}", Fore.RED)
